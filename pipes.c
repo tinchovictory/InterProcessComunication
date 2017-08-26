@@ -47,7 +47,9 @@ int main(void) {
 		close(pcPipe[1]);
 
 		//write(1, "Im child process", 17);
-		execl("./prog","prog",NULL);
+		//execl("./prog","prog",NULL);
+
+		execl("/usr/bin/md5sum","md5sum", "./forkTest.c",NULL);
 
 		exit(0);
 
