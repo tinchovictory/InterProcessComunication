@@ -1,13 +1,11 @@
-#include <sys/types.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "queue.h"
-
 
 
 int main(void) {
@@ -21,20 +19,26 @@ int main(void) {
 	/* Create filesQueue */
 	T_Queue filesQueue;
 	filesQueue = newQueue();
-
-	/* Test files queue */
-	filesQueue = offer(filesQueue, "./forkTest.c");
-	filesQueue = offer(filesQueue, "./maintest.c");
-	filesQueue = offer(filesQueue, "./prog.c");
-	/**/
 	
+	/*Read filesNames sent by parent*/
+	char ch;
+	int pos = 0;
+	while(read(0, &ch, 1) == 1) {
 
+		if(ch != 0 && ch != '\n') {
+			fileName[pos++] = ch;
+		} else if(ch == '\n') { /* Por alguna razon manda un \n y un 0 al final. Solo me importa el 0*/
+			continue;
+		} else {
+			fileName[pos] = 0;
+			filesQueue = offer(filesQueue, fileName);
+			pos = 0;
+		}
+	}
 
 	/* While filesQueue is not empty get hash of files */
-
 	while(!isEmpty(filesQueue)) {
 		filesQueue = poll(filesQueue,fileName);
-
 
 		/* Create pipes */
 
@@ -70,17 +74,6 @@ int main(void) {
 			close(cpPipe[0]);
 			close(pcPipe[1]);
 
-			/*printf("Pending %d \n", getpid());
-			sleep(2);
-			printf("Pending %d \n", getpid());
-			printf("Pending %d \n", getpid());
-			sleep(5);
-			printf("Pending %d \n", getpid());
-			sleep(8);
-			printf("Pending %d \n", getpid());
-			sleep(5);*/
-
-
 			/* Run md5sum in child process */
 			execl("/usr/bin/md5sum", "md5sum", fileName, NULL);
 
@@ -89,20 +82,16 @@ int main(void) {
 		} else {
 			/* Parent process code */
 
-			close(pcPipe[1]); // si no los pongo no anda :(
-			close(cpPipe[1]);
+			close(pcPipe[1]); /* Close pipe section not beeing used */
+			close(cpPipe[1]); /* Close pipe section not beeing used */
 
+			/* Write to parent process md5 hash */
 			char ch;
-			printf("Getting hash...\n");
 			while( read(cpPipe[0], &ch, 1) == 1) {
 				putchar(ch);
 			}
 
-			printf("Done %d\n", pid);
-
-
 		}
-
 
 	}
 	

@@ -3,19 +3,18 @@
 
 #include "queue.h"
 
-//#define FILENAME_SIZE 50
-
-//typedef struct node * T_Queue;
-
+/* Node struct, contains a string and a pointer to the next node */
 typedef struct node {
 	char name[FILENAME_SIZE];
 	struct node *next;
 } Tnode;
 
+/* Create a new Queue */
 T_Queue newQueue() {
 	return NULL;
 }
 
+/* Add a string to the queue passed by parameters. Returns the new queue. */
 T_Queue offer(T_Queue q, const char elem[FILENAME_SIZE]) {
 	if(q == NULL) {
 		T_Queue aux = malloc(sizeof(Tnode));
@@ -30,6 +29,7 @@ T_Queue offer(T_Queue q, const char elem[FILENAME_SIZE]) {
 	return q;
 }
 
+/* Remove the first element of the queue. Returns the new queue. The removed item copied to parameter resp */
 T_Queue poll(T_Queue q, char resp[FILENAME_SIZE]) {
 	if (q == NULL) {
 		return NULL;
@@ -41,6 +41,7 @@ T_Queue poll(T_Queue q, char resp[FILENAME_SIZE]) {
 	return q->next;//falta borrar el otro
 }
 
+/* Returns 0 if the queue is empty */
 int isEmpty(T_Queue q) {
 	if(q == NULL) {
 		return 1;
