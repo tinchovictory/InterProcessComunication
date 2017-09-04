@@ -7,7 +7,6 @@
 
 #include "queue.h"
 
-
 int main(void) {
 	
 	pid_t pid;
@@ -75,7 +74,16 @@ int main(void) {
 			close(pcPipe[1]);
 
 			/* Run md5sum in child process */
-			execl("/usr/bin/md5sum", "md5sum", fileName, NULL);
+			//execl("/usr/bin/md5sum", "md5sum", fileName, NULL);
+
+				write(1, "hola soy 0\n", strlen("hola soy 0\n")+1);
+
+				sleep(6);
+
+				//close(1);
+				write(1, "hola2 soy 0\n", strlen("hola2 soy 0\n")+1);
+
+			//printf("hola\n");
 
 			exit(0);
 
@@ -90,6 +98,8 @@ int main(void) {
 			while( read(cpPipe[0], &ch, 1) == 1) {
 				putchar(ch);
 			}
+			//printf("done\n");
+			//putchar('\n');
 
 		}
 
