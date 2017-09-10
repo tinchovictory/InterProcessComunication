@@ -1,7 +1,7 @@
 #ifndef __QUEUE
 	#define __QUEUE
 	
-	#define FILENAME_SIZE 50
+	#define FILENAME_SIZE 200
 
 	typedef struct node * T_Queue;
 
@@ -16,5 +16,8 @@
 
 	/* Returns 0 if the queue is empty */
 	int isEmpty(T_Queue q);
+
+	/* Returns the queue size */
+	int size(T_Queue q);
 
 #endif

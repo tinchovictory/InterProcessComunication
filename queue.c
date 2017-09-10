@@ -48,3 +48,11 @@ int isEmpty(T_Queue q) {
 	}
 	return 0;
 }
+
+/* Returns the queue size */
+int size(T_Queue q) {
+	if(q == NULL) {
+		return 0;
+	}
+	return 1 + size(q->next);
+}
