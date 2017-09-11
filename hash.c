@@ -59,6 +59,7 @@ void formatOutput(char * str);
 
 int isFile(const char *path);
 int isDirectory(const char *path);
+int isValidDirectory(const char * path);
 void formatFileName(char * input, char output[FILENAME_SIZE]);
 T_Queue getFiles(int argc, char* argv[]);
 void printErrorMsg();
@@ -69,7 +70,7 @@ int main(int argc, char* argv[]) {
 	pid_t pid;
 	T_Queue filesQueue, responseQueue;
 	int filesAmount;
-	char * shm;
+	char * shm = NULL;
 
 	/* Get files from input */
 	filesQueue = getFiles(argc, argv);
@@ -236,13 +237,12 @@ T_Queue getFiles(int argc, char* argv[]) {
 
 	DIR *mydir;
 	struct dirent *myfile;
-	struct stat mystat;
 
 	char fileName[FILENAME_SIZE];
 
 	for(i = 1; i < argc; i++) {
 
-		if(isDirectory(argv[i])) {
+		if(isDirectory(argv[i]) && isValidDirectory(argv[i])) {
 			
 			mydir = opendir(argv[i]);
 			
@@ -298,12 +298,25 @@ int isDirectory(const char *path) {
 
 
 /*
+ * Check if the directory path ends with '/*'. 
+ */
+int isValidDirectory(const char * path) {
+	int pathLength = strlen(path);
+	if(path[pathLength-1] == '*' && path[pathLength-2] == '/') {
+		return 1;
+	}
+	return 0;
+}
+
+
+/*
  * End the file name with a '\n' character. 
  */
 void formatFileName(char * input, char output[FILENAME_SIZE]) {
 	int i = 0;
 	while(*(input+i)) {
-		output[i] = input[i++];
+		output[i] = input[i];
+		i++;
 	}
 
 	output[i++] = '\n';
@@ -546,6 +559,8 @@ char * startSHM(char * shm) {
 
 	/* Avoid telling the output process that no more hashes to be printed */
 	*shm = 's';
+
+	return shm;
 
 }
 

@@ -16,7 +16,7 @@ int isEndOfConnection(char * shm);
 void sendImReady(char *  shm);
 
 int main(void) {
-	char * shm;
+	char * shm = NULL;
 
 	/* Start shared memory. */
 	shm = startSHM(shm);
@@ -75,6 +75,8 @@ char * startSHM(char * shm) {
 
 	/* Inform main process that I was created */
 	sendImReady(shm);
+
+	return shm;
 }
 
 
