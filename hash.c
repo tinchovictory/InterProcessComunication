@@ -241,13 +241,10 @@ T_Queue getFiles(int argc, char* argv[]) {
 	char fileName[FILENAME_SIZE];
 
 	for(i = 1; i < argc; i++) {
-
 		if(isDirectory(argv[i]) && isValidDirectory(argv[i])) {
-			
 			mydir = opendir(argv[i]);
 			
 			while((myfile = readdir(mydir)) != NULL) {
-
 				if(!((strcmp(myfile->d_name, ".") == 0) || (strcmp(myfile->d_name, "..") == 0))) {
 					formatFileName(argv[i], fileName);
 					filesQueue = offer(filesQueue, fileName);
@@ -257,6 +254,8 @@ T_Queue getFiles(int argc, char* argv[]) {
 		} else if(isFile(argv[i])) {
 			formatFileName(argv[i], fileName);
 			filesQueue = offer(filesQueue, fileName);
+		} else if(isDirectory(argv[i])) {
+			continue;
 		} else {
 			if(valid) {
 				printErrorMsg();
