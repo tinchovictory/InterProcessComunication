@@ -38,7 +38,9 @@ T_Queue poll(T_Queue q, char resp[FILENAME_SIZE]) {
 	for(i = 0; i < FILENAME_SIZE; i++) {
 		resp[i] = q->name[i];
 	}
-	return q->next;//falta borrar el otro
+	T_Queue aux = q->next;
+	free(q);
+	return aux;
 }
 
 /* Returns 0 if the queue is empty */
